@@ -32,8 +32,6 @@ public:
 
     void rotate(double);
 
-    void jumpUpdate(double gravity, double interval);
-
 private:
     QPointF position;
     double angle;

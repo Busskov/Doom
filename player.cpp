@@ -2,12 +2,12 @@
 #include <cmath>
 
 Player::Player() {
-    position = QPointF(0, 0);
+    position = QPointF(20, 20);
     angle = 0;
     viewAngle = M_PI_4;
     height = 2;
     hitboxRadius = 0.5;
-    speed = 1;
+    speed = 60;
     verticalSpeed = 0;
     jumpHeight = 0;
     gun = Gun();
@@ -107,15 +107,4 @@ void Player::rotate(double addAngle) {
     if (angle < 0) {
         angle += 2 * M_PI;
     }
-}
-
-void Player::jumpUpdate(double gravity, double interval) {
-    double newVerticalSpeed = verticalSpeed - gravity * interval;
-    jumpHeight += (newVerticalSpeed + verticalSpeed) / 2 * interval;
-    if (jumpHeight < 0) {
-        jumpHeight = 0;
-        verticalSpeed = 0;
-        return;
-    }
-    verticalSpeed = newVerticalSpeed;
 }
