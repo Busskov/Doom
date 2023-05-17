@@ -2,12 +2,12 @@
 #include <cmath>
 
 Player::Player() {
-    position = QPointF(20, 20);
+    position = QPointF(0, 0);
     angle = 0;
     viewAngle = M_PI_4;
     height = 2;
     hitboxRadius = 0.5;
-    speed = 60;
+    speed = 10;
     verticalSpeed = 0;
     jumpHeight = 0;
     gun = Gun();

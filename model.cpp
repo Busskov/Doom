@@ -22,7 +22,7 @@ Player& Model::getPlayer() {
     return player;
 }
 
-const Monsters& Model::getMonsters() const {
+Monsters& Model::getMonsters() {
     return monsters;
 }
 

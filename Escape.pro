@@ -10,6 +10,10 @@ CONFIG += c++17
 
 SOURCES += \
     controller.cpp \
+    drawGun.cpp \
+    drawMonsters.cpp \
+    drawScore.cpp \
+    drawWalls.cpp \
     gun.cpp \
     main.cpp \
     map.cpp \

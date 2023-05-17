@@ -11,7 +11,7 @@ public:
     Model(Player, Monsters, Map, int, double);
 
     Player& getPlayer();
-    const Monsters& getMonsters() const;
+    Monsters& getMonsters();
     const Map& getMap() const;
 
     int getScore() const;

@@ -2,24 +2,26 @@
 #include <QCoreApplication>
 #include <cmath>
 #include <QDebug>
+#include <QTime>
 
 Controller::Controller(Model *newModel, View *newView, QObject *parent) :
     QObject(parent),
     model(newModel),
     view(newView)
 {
-    QPoint center = this->view->rect().center();
-    QPoint globalCenter = this->view->mapToGlobal(center);
-    QCursor::setPos(globalCenter);
-
     updateTimer = new QTimer(this);
+    updateTimer->setTimerType(Qt::PreciseTimer);
     connect(updateTimer, &QTimer::timeout, this, &Controller::updateView);
-    updateTimer->start(1);
+    updateTimer->start(15);
 
     keyA = new QTimer(this);
     keyD = new QTimer(this);
     keyS = new QTimer(this);
     keyW = new QTimer(this);
+    keyA->setTimerType(Qt::PreciseTimer);
+    keyD->setTimerType(Qt::PreciseTimer);
+    keyS->setTimerType(Qt::PreciseTimer);
+    keyW->setTimerType(Qt::PreciseTimer);
 
     connect(keyA, &QTimer::timeout, this, &Controller::keyAAction);
     connect(keyW, &QTimer::timeout, this, &Controller::keyWAction);
@@ -44,7 +46,7 @@ Controller::Controller(Model *newModel, View *newView, QObject *parent) :
 void Controller::mouseMove(QMouseEvent *event) {
     int centerX = view->width() / 2;
     int delta = centerX - event->x();
-    model->getPlayer().rotate(delta * 1.0 / centerX * M_PI_4);
+    model->getPlayer().rotate(delta * 1.0 / centerX * model->getPlayer().getViewAngle());
 
     QPoint center = this->view->rect().center();
     QPoint globalCenter = this->view->mapToGlobal(center);
@@ -62,19 +64,19 @@ void Controller::spaceClicked(QKeyEvent *event) {
 }
 
 void Controller::keyAPressed() {
-    keyA->start(1);
+    keyA->start(15);
 }
 
 void Controller::keyWPressed() {
-    keyW->start(1);
+    keyW->start(15);
 }
 
 void Controller::keyDPressed() {
-    keyD->start(1);
+    keyD->start(15);
 }
 
 void Controller::keySPressed() {
-    keyS->start(1);
+    keyS->start(15);
 }
 
 void Controller::keyAReleased() {
@@ -93,13 +95,30 @@ void Controller::keySReleased() {
     keyS->stop();
 }
 
+void inMap(const std::vector<QPointF>& vertices, double hitbox, QPointF& point) {
+    if (point.x() < vertices[0].x() + hitbox) {
+        point.setX(vertices[0].x() + hitbox);
+    }
+    if (point.x() > vertices[2].x() - hitbox) {
+        point.setX(vertices[2].x() - hitbox);
+    }
+    if (point.y() < vertices[0].y() + hitbox) {
+        point.setY(vertices[0].y() + hitbox);
+    }
+    if (point.y() > vertices[2].y() - hitbox) {
+        point.setY(vertices[2].y() - hitbox);
+    }
+}
+
 void Controller::keyAAction() {
     QPointF position = model->getPlayer().getPosition();
     double angle = model->getPlayer().getAngle();
     angle += M_PI_2;
     double length = model->getPlayer().getSpeed() * (keyA->interval() / 1000.0);
-    QPointF resultSpeed(position.x() + length * cos(angle), position.y() - length * sin(angle));
-    model->getPlayer().setPosition(resultSpeed);
+    QPointF result(position.x() + length * cos(angle), position.y() - length * sin(angle));
+
+    inMap(model->getMap().getVertices(), model->getPlayer().getHitboxRadius(), result);
+    model->getPlayer().setPosition(result);
 }
 
 void Controller::keyDAction() {
@@ -107,17 +126,20 @@ void Controller::keyDAction() {
     double angle = model->getPlayer().getAngle();
     angle -= M_PI_2;
     double length = model->getPlayer().getSpeed() * (keyD->interval() / 1000.0);
-    QPointF resultSpeed(position.x() + length * cos(angle), position.y() - length * sin(angle));
-    model->getPlayer().setPosition(resultSpeed);
+    QPointF result(position.x() + length * cos(angle), position.y() - length * sin(angle));
+
+    inMap(model->getMap().getVertices(), model->getPlayer().getHitboxRadius(), result);
+    model->getPlayer().setPosition(result);
 }
 
 void Controller::keyWAction() {
     QPointF position = model->getPlayer().getPosition();
     double angle = model->getPlayer().getAngle();
     double length = model->getPlayer().getSpeed() * (keyW->interval() / 1000.0);
-    qDebug() << length;
-    QPointF resultSpeed(position.x() + length * cos(angle), position.y() - length * sin(angle));
-    model->getPlayer().setPosition(resultSpeed);
+    QPointF result(position.x() + length * cos(angle), position.y() - length * sin(angle));
+
+    inMap(model->getMap().getVertices(), model->getPlayer().getHitboxRadius(), result);
+    model->getPlayer().setPosition(result);
 }
 
 void Controller::keySAction() {
@@ -125,8 +147,10 @@ void Controller::keySAction() {
     double angle = model->getPlayer().getAngle();
     angle += M_PI;
     double length = model->getPlayer().getSpeed() * (keyS->interval() / 1000.0);
-    QPointF resultSpeed(position.x() + length * cos(angle), position.y() - length * sin(angle));
-    model->getPlayer().setPosition(resultSpeed);
+    QPointF result(position.x() + length * cos(angle), position.y() - length * sin(angle));
+
+    inMap(model->getMap().getVertices(), model->getPlayer().getHitboxRadius(), result);
+    model->getPlayer().setPosition(result);
 }
 
 void Controller::updateView() {
