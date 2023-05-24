@@ -14,6 +14,10 @@ Controller::Controller(Model *newModel, View *newView, QObject *parent) :
     connect(updateTimer, &QTimer::timeout, this, &Controller::updateView);
     updateTimer->start(15);
 
+    generateMonsterTimer = new QTimer(this);
+    connect(generateMonsterTimer, &QTimer::timeout, this, &Controller::generateMonster);
+    generateMonsterTimer->start(10'000);
+
     keyA = new QTimer(this);
     keyD = new QTimer(this);
     keyS = new QTimer(this);
@@ -53,11 +57,8 @@ void Controller::mouseMove(QMouseEvent *event) {
     QCursor::setPos(globalCenter);
 }
 
-void Controller::leftClicked(QMouseEvent *event) {
-
-}
-
 void Controller::spaceClicked(QKeyEvent *event) {
+    Q_UNUSED(event);
     if (model->getPlayer().getVerticalSpeed() == 0) {
         model->getPlayer().setVerticalSpeed(10);
     }
@@ -161,4 +162,11 @@ void Controller::updateView() {
         QCoreApplication::quit();
     }
     view->repaint();
+}
+
+void Controller::generateMonster() {
+    QImage imageMonster = QImage(100, 100, QImage::Format_RGB32);
+    imageMonster.fill(QColor("red"));
+    Monster monster(imageMonster, 2.5, QPointF(20, 0), 10, 2, 2);
+    model->getMonsters().addMonster(monster);
 }

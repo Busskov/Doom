@@ -2,17 +2,17 @@
 #define MONSTER_H
 
 #include <player.h>
-#include <QPixmap>
+#include <QImage>
 #include <QPointF>
 
 class Monster {
 public:
     Monster();
-    Monster(QPixmap, double, QPointF, int, double, double);
+    Monster(QImage, double, QPointF, int, double, double);
 
     double getSpeed() const;
     void setSpeed(double);
-    const QPixmap& getImage() const;
+    const QImage& getImage() const;
     double getHeight() const;
     const QPointF& getPosition() const;
     void setPosition(const QPointF&);
@@ -23,7 +23,7 @@ public:
     void hit(int damage);
 
 private:
-    QPixmap image;
+    QImage image;
     double height;
     QPointF position;
     int health;

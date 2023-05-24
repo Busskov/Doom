@@ -16,6 +16,8 @@ public:
 public slots:
     void updateView();
 
+    void generateMonster();
+
     void mouseMove(QMouseEvent *event);
     void leftClicked(QMouseEvent *event);
     void spaceClicked(QKeyEvent *event);
@@ -40,6 +42,7 @@ private:
     View* view;
 
     QTimer* updateTimer;
+    QTimer* generateMonsterTimer;
     QTimer* keyA;
     QTimer* keyW;
     QTimer* keyD;

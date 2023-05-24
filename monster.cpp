@@ -2,7 +2,7 @@
 #include <cmath>
 
 Monster::Monster() {
-    image = QPixmap();
+    image = QImage();
     height = 2;
     position = QPointF(0, 0);
     health = 1;
@@ -11,7 +11,7 @@ Monster::Monster() {
 }
 
 Monster::Monster
-(QPixmap newImage, double newHeight, QPointF newPosition,
+(QImage newImage, double newHeight, QPointF newPosition,
 int newHealth, double newHitboxRadius, double newSpeed) {
     image = newImage;
     height = newHeight;
@@ -29,7 +29,7 @@ void Monster::setSpeed(double value) {
     speed = value;
 }
 
-const QPixmap& Monster::getImage() const {
+const QImage& Monster::getImage() const {
     return image;
 }
 
@@ -71,4 +71,7 @@ void Monster::hit(int damage) {
     if (health < 0) {
         health = 0;
     }
+    QImage imageMonster = QImage(100, 100, QImage::Format_RGB32);
+    imageMonster.fill(QColor("blue"));
+    image = imageMonster;
 }

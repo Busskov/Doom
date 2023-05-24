@@ -35,7 +35,9 @@ void View::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void View::mousePressEvent(QMouseEvent *event) {
-    emit leftClick(event);
+    if (event->button() == Qt::LeftButton) {
+        emit leftClick(event);
+    }
 }
 
 void View::keyReleaseEvent(QKeyEvent *event) {

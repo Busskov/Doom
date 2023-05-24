@@ -21,6 +21,7 @@ SOURCES += \
     monster.cpp \
     monsters.cpp \
     player.cpp \
+    shoot.cpp \
     view.cpp
 
 HEADERS += \

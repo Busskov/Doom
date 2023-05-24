@@ -72,7 +72,8 @@ bool Model::isPlayerDied() {
         double length =
                 sqrt((point.x() - monsterPos.x())*(point.x() - monsterPos.x())
                      + (point.y() - monsterPos.y())*(point.y() - monsterPos.y()));
-        if (length < player.getHitboxRadius() + arrayMonsters[i].getHitboxRadius()) {
+        if (length < player.getHitboxRadius() + arrayMonsters[i].getHitboxRadius()
+                && arrayMonsters[i].getHeight() >= player.getJumpHeight()) {
             return 1;
         }
     }
