@@ -2,6 +2,7 @@
 #include <QCoreApplication>
 #include <cmath>
 #include <QDebug>
+#include <QLabel>
 #include <QTime>
 
 Controller::Controller(Model *newModel, View *newView, QObject *parent) :
@@ -165,8 +166,12 @@ void Controller::updateView() {
 }
 
 void Controller::generateMonster() {
-    QImage imageMonster = QImage(100, 100, QImage::Format_RGB32);
-    imageMonster.fill(QColor("red"));
-    Monster monster(imageMonster, 2.5, QPointF(20, 0), 10, 2, 2);
+    QImage imageMonster = QImage(457, 457, QImage::Format_RGB32);
+    QPainter painter(&imageMonster);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setBrush(QBrush(QImage(":/images/images/gameicon.png")));
+    painter.setPen(Qt::NoPen);
+    painter.drawEllipse(0, 0, 457, 457);
+    Monster monster(imageMonster, 3.7, QPointF(20, 0), 10, 2, 2);
     model->getMonsters().addMonster(monster);
 }

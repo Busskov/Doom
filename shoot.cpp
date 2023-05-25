@@ -3,17 +3,6 @@
 #include <algorithm>
 #include <QDebug>
 
-struct MonsterRelative {
-    Monster monster;
-    double angle;
-    double length;
-    double deviation;
-};
-
-bool comparisonLength(const MonsterRelative& first, const MonsterRelative& second) {
-    return first.length < second.length;
-}
-
 void Controller::leftClicked(QMouseEvent *event) {
     Q_UNUSED(event);
     std::vector<Monster>& monsters = model->getMonsters().getMonsters();
@@ -44,33 +33,19 @@ void Controller::leftClicked(QMouseEvent *event) {
         // y' = (y - a2)
         double dx = monsters[i].getPosition().x() - position.x();
         double dy = -monsters[i].getPosition().y() + position.y();
+        double dz = monsters[i].getHeight() - player.getHeight() - player.getJumpHeight();
 
-        double length = sqrt(dx * dx + dy * dy);
+        double length = sqrt(dx * dx + dy * dy + dz * dz);
         // deviation of the borders of the monster
         double deviation = asin(monsters[i].getHitboxRadius() / length);
 
         double angle;
-        if (dx > -0.000001 && dx < 0.000001) {
-            angle = (M_PI / 2.0) * ((dy < 0) ? -1 : 1);
-        } else {
-            angle = atan(dy / dx) + ((dx < 0) ? M_PI : 0);
-        }
-        if (angle < 0) {
-            angle += 2 * M_PI;
-        }
+        // cos(angle) = a*b/(|a|*|b|)
+        // a = (cos, -sin, 0)
+        double gameAngle = player.getAngle();
+        angle = acos((dx * cos(gameAngle) - dy * sin(gameAngle)) / length);
 
-        // recount angle relatively to center [-pi, pi]
-        angle = player.getAngle() - angle;
-        if (angle < -M_PI) {
-            angle += 2 * M_PI;
-        }
-        if (angle > M_PI) {
-            angle -= 2 * M_PI;
-        }
-
-        double rightAngle = angle + deviation;
-        double leftAngle = angle - deviation;
-        if (rightAngle >= 0 && leftAngle <= 0) {
+        if (angle <= deviation) {
             monsters[i].hit(player.getGun().getDamage());
             if (monsters[i].isDead()) {
                 model->getMonsters().removeMonster(i);
