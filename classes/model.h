@@ -1,9 +1,9 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <monsters.h>
-#include <map.h>
-#include <player.h>
+#include <classes/monsters.h>
+#include <classes/map.h>
+#include <classes/player.h>
 
 class Model {
 public:

@@ -1,8 +1,8 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <model.h>
-#include <view.h>
+#include <classes/model.h>
+#include <classes/view.h>
 #include <QObject>
 #include <QTimer>
 #include <QPoint>

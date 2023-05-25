@@ -1,13 +1,20 @@
-#include <gun.h>
+#include <classes/gun.h>
 
 Gun::Gun() {
-    image = QPixmap();
+    image = QImage();
     damage = 1;
     frequency = 0;
     delay = 0;
 }
 
-Gun::Gun(QPixmap newImage, int newFrequency, int newDamage) {
+Gun::Gun(const Gun& other) {
+    image = other.image;
+    frequency = other.frequency;
+    delay = 0;
+    damage = other.damage;
+}
+
+Gun::Gun(QImage newImage, int newFrequency, int newDamage) {
     image = newImage;
     frequency = newFrequency;
     damage = newDamage;
@@ -21,7 +28,7 @@ void Gun::operator=(const Gun& other) {
     delay = 0;
 }
 
-const QPixmap& Gun::getImage() const {
+const QImage& Gun::getImage() const {
     return image;
 }
 

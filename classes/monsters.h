@@ -2,7 +2,7 @@
 #define MONSTERS_H
 
 #include <vector>
-#include <monster.h>
+#include <classes/monster.h>
 
 class Monsters {
 public:

@@ -1,4 +1,4 @@
-#include <controller.h>
+#include <classes/controller.h>
 #include <cmath>
 #include <algorithm>
 #include <QDebug>
@@ -43,7 +43,7 @@ void Controller::leftClicked(QMouseEvent *event) {
         // cos(angle) = a*b/(|a|*|b|)
         // a = (cos, -sin, 0)
         double gameAngle = player.getAngle();
-        angle = acos((dx * cos(gameAngle) - dy * sin(gameAngle)) / length);
+        angle = acos((dx * cos(gameAngle) + dy * sin(gameAngle)) / length);
 
         if (angle <= deviation) {
             monsters[i].hit(player.getGun().getDamage());

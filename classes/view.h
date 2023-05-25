@@ -6,7 +6,7 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QKeyEvent>
-#include <model.h>
+#include <classes/model.h>
 
 class View : public QMainWindow
 {

@@ -1,22 +1,23 @@
 #ifndef GUN_H
 #define GUN_H
 
-#include <QPixmap>
+#include <QImage>
 
 class Gun {
 public:
     Gun();
-    Gun(QPixmap, int, int);
+    Gun(const Gun& other);
+    Gun(QImage, int, int);
     void operator=(const Gun&);
 
-    const QPixmap& getImage() const;
+    const QImage& getImage() const;
     int getDamage() const;
     void setFrequency(int);
 
     bool isReadyToShoot();
 
 private:
-    QPixmap image;
+    QImage image;
     int damage;
     int frequency;
     int delay;

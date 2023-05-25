@@ -1,4 +1,5 @@
-#include <monster.h>
+#include <classes/monster.h>
+#include <QPainter>
 #include <cmath>
 
 Monster::Monster() {
@@ -71,7 +72,8 @@ void Monster::hit(int damage) {
     if (health < 0) {
         health = 0;
     }
-    QImage imageMonster = QImage(100, 100, QImage::Format_RGB32);
-    imageMonster.fill(QColor("blue"));
-    image = imageMonster;
+    QImage newImage = image;
+    QPainter painter(&newImage);
+    painter.fillRect(newImage.rect(), QColor(255, 0, 0, 35));
+    image = newImage;
 }

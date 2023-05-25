@@ -1,7 +1,7 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
-#include <player.h>
+#include <classes/player.h>
 #include <QImage>
 #include <QPointF>
 
