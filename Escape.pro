@@ -9,30 +9,30 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    controller.cpp \
-    drawGun.cpp \
-    drawMonsters.cpp \
-    drawScore.cpp \
-    drawWalls.cpp \
-    gun.cpp \
-    main.cpp \
-    map.cpp \
-    model.cpp \
-    monster.cpp \
-    monsters.cpp \
-    player.cpp \
-    shoot.cpp \
-    view.cpp
+    realizations/controller.cpp \
+    realizations/draw/drawGun.cpp \
+    realizations/draw/drawMonsters.cpp \
+    realizations/draw/drawScore.cpp \
+    realizations/draw/drawWalls.cpp \
+    realizations/gun.cpp \
+    realizations/main.cpp \
+    realizations/map.cpp \
+    realizations/model.cpp \
+    realizations/monster.cpp \
+    realizations/monsters.cpp \
+    realizations/player.cpp \
+    realizations/shoot.cpp \
+    realizations/view.cpp
 
 HEADERS += \
-    controller.h \
-    map.h \
-    model.h \
-    monster.h \
-    monsters.h \
-    player.h \
-    gun.h \
-    view.h
+    classes/controller.h \
+    classes/map.h \
+    classes/model.h \
+    classes/monster.h \
+    classes/monsters.h \
+    classes/player.h \
+    classes/gun.h \
+    classes/view.h
 
 FORMS += \
     view.ui
@@ -41,3 +41,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    images.qrc

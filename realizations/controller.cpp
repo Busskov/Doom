@@ -1,8 +1,10 @@
-#include <controller.h>
+#include <classes/controller.h>
 #include <QCoreApplication>
 #include <cmath>
 #include <QDebug>
+#include <QLabel>
 #include <QTime>
+#include <QtGlobal>
 
 Controller::Controller(Model *newModel, View *newView, QObject *parent) :
     QObject(parent),
@@ -165,8 +167,11 @@ void Controller::updateView() {
 }
 
 void Controller::generateMonster() {
-    QImage imageMonster = QImage(100, 100, QImage::Format_RGB32);
-    imageMonster.fill(QColor("red"));
-    Monster monster(imageMonster, 2.5, QPointF(20, 0), 10, 2, 2);
+    QImage imageMonster = QImage(":/images/images/gameicon.png");
+    qsrand(QTime::currentTime().msec());
+
+    float randomHeight = qrand() % 9 + static_cast<float>(qrand())
+            / static_cast<float>(RAND_MAX);
+    Monster monster(imageMonster, randomHeight, QPointF(20, 0), 10, 2, 2);
     model->getMonsters().addMonster(monster);
 }

@@ -1,4 +1,4 @@
-#include <view.h>
+#include <classes/view.h>
 #include <cmath>
 
 struct Ray {

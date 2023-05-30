@@ -1,4 +1,4 @@
-#include <view.h>
+#include <classes/view.h>
 #include <QDebug>
 
 void View::drawGun(QPainter *painter) {
@@ -12,4 +12,7 @@ void View::drawGun(QPainter *painter) {
     start = QPoint(width - 4, height);
     end = QPoint(width + 4, height);
     painter->drawLine(start, end);
+
+    QImage image = model->getPlayer().getGun().getImage().scaled(0.350 * this->width(), 0.350 * this->height());
+    painter->drawImage(this->width() - image.width(), this->height() - image.height(), image);
 }

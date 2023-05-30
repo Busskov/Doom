@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include <QPointF>
-#include <gun.h>
+#include <classes/gun.h>
 
 class Player {
 public:

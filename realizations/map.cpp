@@ -1,4 +1,4 @@
-#include <map.h>
+#include <classes/map.h>
 #include <stdexcept>
 
 Map::Map() {

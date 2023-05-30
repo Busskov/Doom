@@ -1,4 +1,4 @@
-#include <model.h>
+#include <classes/model.h>
 #include <cmath>
 
 Model::Model() {
