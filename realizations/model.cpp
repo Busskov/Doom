@@ -1,7 +1,14 @@
 #include <classes/model.h>
 #include <cmath>
 
-Model::Model() {
+Model::Model(QObject* parent) : QObject(parent) {
+    soundPlayer = new QMediaPlayer(this);
+    QMediaPlaylist* playList = new QMediaPlaylist(this);
+    playList->addMedia(QUrl("qrc:/sounds/sounds/back.mp3"));
+    playList->setPlaybackMode(QMediaPlaylist::Loop);
+    soundPlayer->setPlaylist(playList);
+    soundPlayer->play();
+
     player = Player();
     monsters = Monsters();
     map = Map();
@@ -10,7 +17,16 @@ Model::Model() {
 }
 
 Model::Model
-(Player newPlayer, Monsters newMonsters, Map newMap, int newScore, double newGravity) {
+(Player newPlayer, Monsters newMonsters, Map newMap, int newScore, double newGravity, QObject* parent) :
+    QObject(parent)
+{
+    soundPlayer = new QMediaPlayer(this);
+    QMediaPlaylist* playList = new QMediaPlaylist(this);
+    playList->addMedia(QUrl("qrc:/sounds/sounds/back.mp3"));
+    playList->setPlaybackMode(QMediaPlaylist::Loop);
+    soundPlayer->setPlaylist(playList);
+    soundPlayer->play();
+
     player = newPlayer;
     monsters = newMonsters;
     map = newMap;

@@ -4,11 +4,15 @@
 #include <classes/monsters.h>
 #include <classes/map.h>
 #include <classes/player.h>
+#include <QMediaPlayer>
+#include <QMediaPlayList>
+#include <QObject>
 
-class Model {
+class Model : public QObject {
+    Q_OBJECT
 public:
-    Model();
-    Model(Player, Monsters, Map, int, double);
+    Model(QObject* parent = nullptr);
+    Model(Player, Monsters, Map, int, double, QObject* parent = nullptr);
 
     Player& getPlayer();
     Monsters& getMonsters();
@@ -30,7 +34,7 @@ private:
     Map map;
     int score;
     double gravity;
-
+    QMediaPlayer* soundPlayer;
 };
 
 #endif // MODEL_H

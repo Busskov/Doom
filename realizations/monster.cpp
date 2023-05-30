@@ -74,6 +74,7 @@ void Monster::hit(int damage) {
     }
     QImage newImage = image;
     QPainter painter(&newImage);
-    painter.fillRect(newImage.rect(), QColor(255, 0, 0, 35));
+    double intensity = damage * 1.0 / health / 0.1;
+    painter.fillRect(newImage.rect(), QColor(255, 0, 0, 20 * intensity));
     image = newImage;
 }

@@ -170,8 +170,8 @@ void Controller::generateMonster() {
     QImage imageMonster = QImage(":/images/images/gameicon.png");
     qsrand(QTime::currentTime().msec());
 
-    float randomHeight = qrand() % 9 + static_cast<float>(qrand())
+    float randomHeight = qrand() % 8 + 1 + static_cast<float>(qrand())
             / static_cast<float>(RAND_MAX);
-    Monster monster(imageMonster, randomHeight, QPointF(20, 0), 10, 2, 2);
+    Monster monster(imageMonster, randomHeight, QPointF(20, 0), 10, 2, 10);
     model->getMonsters().addMonster(monster);
 }

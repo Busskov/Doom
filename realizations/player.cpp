@@ -90,7 +90,7 @@ void Player::setJumpHeight(double value) {
     jumpHeight = value;
 }
 
-const Gun& Player::getGun() const {
+Gun& Player::getGun() {
     return gun;
 }
 
