@@ -50,7 +50,7 @@ Controller::Controller(Model *newModel, View *newView, QObject *parent) :
 }
 
 void Controller::mouseMove(QMouseEvent *event) {
-    int centerX = view->width() / 2;
+    int centerX = view->width() / 2 - 1;
     int delta = centerX - event->x();
     model->getPlayer().rotate(delta * 1.0 / centerX * model->getPlayer().getViewAngle());
 
