@@ -6,6 +6,7 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QKeyEvent>
+#include <QLabel>
 #include <classes/model.h>
 
 class View : public QMainWindow
@@ -29,6 +30,9 @@ signals:
     void keyDReleased();
     void keySReleased();
 
+    void shiftClicked();
+    void shiftReleased();
+
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
@@ -43,6 +47,8 @@ private:
     void drawMonsters(QPainter *);
     void drawGun(QPainter *);
     void drawScore(QPainter *);
+
+    QLabel* score;
 
 };
 #endif // VIEW_H

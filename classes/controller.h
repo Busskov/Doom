@@ -37,6 +37,11 @@ public slots:
     void keyDAction();
     void keySAction();
 
+    void updateScore();
+
+    void shiftClicked();
+    void shiftReleased();
+
 private:
     Model* model;
     View* view;
@@ -47,6 +52,8 @@ private:
     QTimer* keyW;
     QTimer* keyD;
     QTimer* keyS;
+
+    QTimer* scoreUpdate;
 };
 
 #endif // CONTROLLER_H

@@ -14,6 +14,11 @@ Model::Model(QObject* parent) : QObject(parent) {
     map = Map();
     score = 0;
     gravity = 10;
+
+    injured = new QMediaPlayer(this);
+    injured->setMedia(QUrl("qrc:/sounds/sounds/injured.mp3"));
+    killed = new QMediaPlayer(this);
+    killed->setMedia(QUrl("qrc:/sounds/sounds/killed.mp3"));
 }
 
 Model::Model
@@ -32,6 +37,11 @@ Model::Model
     map = newMap;
     score = newScore;
     gravity = newGravity;
+
+    injured = new QMediaPlayer(this);
+    injured->setMedia(QUrl("qrc:/sounds/sounds/injured.mp3"));
+    killed = new QMediaPlayer(this);
+    killed->setMedia(QUrl("qrc:/sounds/sounds/killed.mp3"));
 }
 
 Player& Model::getPlayer() {
@@ -85,13 +95,21 @@ bool Model::isPlayerDied() {
     const QPointF& point = player.getPosition();
     for (std::size_t i = 0; i < arrayMonsters.size(); ++i) {
         const QPointF& monsterPos = arrayMonsters[i].getPosition();
-        double length =
-                sqrt((point.x() - monsterPos.x())*(point.x() - monsterPos.x())
-                     + (point.y() - monsterPos.y())*(point.y() - monsterPos.y()));
-        if (length < player.getHitboxRadius() + arrayMonsters[i].getHitboxRadius()
-                && arrayMonsters[i].getHeight() >= player.getJumpHeight()) {
+        double dx = monsterPos.x() - point.x();
+        double dy = monsterPos.y() - point.y();
+        double dz = arrayMonsters[i].getHeight() - player.getHeight() - player.getJumpHeight();
+        double length = sqrt(dx * dx + dy * dy + dz * dz);
+        if (length < player.getHitboxRadius() + arrayMonsters[i].getHitboxRadius()) {
             return 1;
         }
     }
     return 0;
+}
+
+void Model::killMonster() {
+    killed->play();
+}
+
+void Model::injureMonster() {
+    injured->play();
 }

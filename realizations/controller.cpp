@@ -18,7 +18,7 @@ Controller::Controller(Model *newModel, View *newView, QObject *parent) :
 
     generateMonsterTimer = new QTimer(this);
     connect(generateMonsterTimer, &QTimer::timeout, this, &Controller::generateMonster);
-    generateMonsterTimer->start(10'000);
+    generateMonsterTimer->start(3'000);
 
     keyA = new QTimer(this);
     keyD = new QTimer(this);
@@ -47,6 +47,15 @@ Controller::Controller(Model *newModel, View *newView, QObject *parent) :
     connect(view, &View::keyDReleased, this, &Controller::keyDReleased);
     connect(view, &View::keySReleased, this, &Controller::keySReleased);
     connect(view, &View::keyWReleased, this, &Controller::keyWReleased);
+
+    connect(view, &View::shiftClicked, this, &Controller::shiftClicked);
+    connect(view, &View::shiftReleased, this, &Controller::shiftReleased);
+
+
+    scoreUpdate = new QTimer(this);
+    scoreUpdate->setTimerType(Qt::PreciseTimer);
+    connect(scoreUpdate, &QTimer::timeout, this, &Controller::updateScore);
+    scoreUpdate->start(1000);
 }
 
 void Controller::mouseMove(QMouseEvent *event) {
@@ -64,6 +73,14 @@ void Controller::spaceClicked(QKeyEvent *event) {
     if (model->getPlayer().getVerticalSpeed() == 0) {
         model->getPlayer().setVerticalSpeed(10);
     }
+}
+
+void Controller::shiftClicked() {
+    model->getPlayer().setSpeed(model->getPlayer().getSpeed() * 2);
+}
+
+void Controller::shiftReleased() {
+    model->getPlayer().setSpeed(model->getPlayer().getSpeed() / 2.0);
 }
 
 void Controller::keyAPressed() {
@@ -161,6 +178,7 @@ void Controller::updateView() {
     model->jumpPlayerUpdate(interval);
     model->moveMonsters(interval);
     if (model->isPlayerDied()) {
+        qDebug() << "killed";
         QCoreApplication::quit();
     }
     view->repaint();
@@ -170,8 +188,26 @@ void Controller::generateMonster() {
     QImage imageMonster = QImage(":/images/images/gameicon.png");
     qsrand(QTime::currentTime().msec());
 
-    float randomHeight = qrand() % 8 + 1 + static_cast<float>(qrand())
-            / static_cast<float>(RAND_MAX);
-    Monster monster(imageMonster, randomHeight, QPointF(20, 0), 10, 2, 10);
-    model->getMonsters().addMonster(monster);
+    bool isFound = 0;
+    while(!isFound) {
+        float randomHeight = 1;
+        float randomX = qrand() % 110 - 56 + static_cast<float>(qrand())
+                / static_cast<float>(RAND_MAX);
+        float randomY = qrand() % 110 - 56 + static_cast<float>(qrand())
+                / static_cast<float>(RAND_MAX);
+
+        double dx = randomX - model->getPlayer().getPosition().x();
+        double dy = randomY - model->getPlayer().getPosition().y();
+        double dz = randomHeight - model->getPlayer().getHeight() - model->getPlayer().getJumpHeight();
+        float length = sqrt(dx * dx + dy * dy + dz * dz);
+        if (length > 10) {
+            Monster monster(imageMonster, randomHeight, QPointF(randomX, randomY), 20, 2, 8);
+            model->getMonsters().addMonster(monster);
+            break;
+        }
+    }
+}
+
+void Controller::updateScore() {
+    model->increaseScore();
 }

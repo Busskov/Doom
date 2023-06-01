@@ -11,10 +11,16 @@ View::View(Model *newModel, QWidget *parent)
 //    QPoint center = this->rect().center();
 //    QPoint globalCenter = this->mapToGlobal(center);
 //    QCursor::setPos(globalCenter);
-
     this->resize(1200, 800);
     setMouseTracking(true);
     this->setCursor(Qt::BlankCursor);
+
+    score = new QLabel(this);
+    score->resize(this->width() / 4, this->height() / 8);
+    score->setAlignment(Qt::AlignRight);
+    score->setStyleSheet
+            ("QLabel { font-size: 30pt; background-color : transparent; color : white;}");
+    score->move(QPoint(this->width() * 3 / 4 - 5, 0));
 }
 
 View::~View() {
@@ -41,6 +47,9 @@ void View::mousePressEvent(QMouseEvent *event) {
 }
 
 void View::keyReleaseEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_Shift) {
+        emit shiftReleased();
+    }
     if (event->key() == Qt::Key_A) {
         emit keyAReleased();
     }
@@ -56,6 +65,9 @@ void View::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void View::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_Shift) {
+        emit shiftClicked();
+    }
     if (event->key() == Qt::Key_Space) {
         emit spaceClicked(event);
     }

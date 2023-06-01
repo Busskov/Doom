@@ -28,6 +28,9 @@ public:
     void jumpPlayerUpdate(double interval);
     bool isPlayerDied();
 
+    void killMonster();
+    void injureMonster();
+
 private:
     Player player;
     Monsters monsters;
@@ -35,6 +38,9 @@ private:
     int score;
     double gravity;
     QMediaPlayer* soundPlayer;
+
+    QMediaPlayer* injured;
+    QMediaPlayer* killed;
 };
 
 #endif // MODEL_H

@@ -52,6 +52,9 @@ void Controller::leftClicked(QMouseEvent *event) {
             monsters[i].hit(player.getGun().getDamage());
             if (monsters[i].isDead()) {
                 model->getMonsters().removeMonster(i);
+                model->killMonster();
+            } else {
+                model->injureMonster();
             }
             return;
         }
