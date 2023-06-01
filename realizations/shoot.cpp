@@ -7,9 +7,12 @@ void Controller::leftClicked(QMouseEvent *event) {
     Q_UNUSED(event);
     std::vector<Monster>& monsters = model->getMonsters().getMonsters();
 
-    const Player& player = model->getPlayer();
+    Player& player = model->getPlayer();
     const QPointF& position = player.getPosition();
 
+    if (!player.getGun().isReadyToShoot()) {
+        return;
+    }
     std::sort(monsters.begin(), monsters.end(), [position](const Monster& first, const Monster& second) {
         // absolute value
         // use the coordinate transformation formula
@@ -49,6 +52,9 @@ void Controller::leftClicked(QMouseEvent *event) {
             monsters[i].hit(player.getGun().getDamage());
             if (monsters[i].isDead()) {
                 model->getMonsters().removeMonster(i);
+                model->killMonster();
+            } else {
+                model->injureMonster();
             }
             return;
         }

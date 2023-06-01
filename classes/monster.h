@@ -3,9 +3,12 @@
 
 #include <classes/player.h>
 #include <QImage>
+#include <QObject>
+#include <QMediaPlayer>
 #include <QPointF>
 
 class Monster {
+
 public:
     Monster();
     Monster(QImage, double, QPointF, int, double, double);
@@ -15,6 +18,7 @@ public:
     const QImage& getImage() const;
     double getHeight() const;
     const QPointF& getPosition() const;
+    void setHeight(double);
     void setPosition(const QPointF&);
     double getHitboxRadius() const;
 
@@ -29,7 +33,6 @@ private:
     int health;
     double hitboxRadius;
     double speed;
-
 };
 
 #endif // MONSTER_H

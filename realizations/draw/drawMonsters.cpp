@@ -2,24 +2,33 @@
 #include <QDebug>
 #include <cmath>
 
-struct MonsterRelative {
-    Monster monster;
-    double angleHorizontal;
-    double angleVertical;
-    double length;
-    double deviation;
-};
-
-bool comparison(const MonsterRelative& first, const MonsterRelative& second) {
-    return first.length > second.length;
-}
-
 void View::drawMonsters(QPainter *painter) {
-    const std::vector<Monster>& monsters = model->getMonsters().getMonsters();
+    std::vector<Monster>& monsters = model->getMonsters().getMonsters();
     const Player& player = model->getPlayer();
     const QPointF& position = player.getPosition();
 
-    std::vector<MonsterRelative> monstersRelative;
+    // sorting monsters by their length to the player
+    std::sort(monsters.begin(), monsters.end(), [player, position](Monster& first, Monster& second) {
+        // absolute value
+        // use the coordinate transformation formula
+        // x' = (x - a1)
+        // y' = (y - a2)
+        double dxFirst = first.getPosition().x() - position.x();
+        double dyFirst = -first.getPosition().y() + position.y();
+        double dzFirst = first.getHeight() - player.getHeight() - player.getJumpHeight();
+
+        double lengthFirst = sqrt(dxFirst * dxFirst + dyFirst * dyFirst + dzFirst * dzFirst);
+
+        double dxSecond = second.getPosition().x() - position.x();
+        double dySecond = -second.getPosition().y() + position.y();
+        double dzSecond = second.getHeight() - player.getHeight() - player.getJumpHeight();
+
+        double lengthSecond =
+                sqrt(dxSecond * dxSecond + dySecond * dySecond + dzSecond * dzSecond);
+
+        return lengthFirst > lengthSecond;
+    });
+
     // count monsters' angles relatively to angleLeft
     for (std::size_t i = 0; i < monsters.size(); ++i) {
         // absolute value
@@ -63,26 +72,18 @@ void View::drawMonsters(QPainter *painter) {
                 angleVertical = -M_PI - angleVertical;
             }
         }
-        // it can't be less than -pi, because viewAngle < pi / 2
-        monstersRelative.push_back(MonsterRelative({monsters[i], angleHorizontal, angleVertical, length, deviation}));
-    }
-    // sorting monsters by their length to the player
-    std::sort(monstersRelative.begin(), monstersRelative.end(), comparison);
 
-    // drawing monsters
-    for (std::size_t i = 0; i < monstersRelative.size(); ++i) {
-        const MonsterRelative& monsterRelative = monstersRelative[i];
-        QImage image = monsterRelative.monster.getImage();
+        // drawing monsters
+        QImage image = monsters[i].getImage();
         // half of the width
-        int imageWidthHalf = monsterRelative.deviation / player.getViewAngle() * (width() / 2.0);
-        int imageX = (width() / 2.0) * (1 + monsterRelative.angleHorizontal / player.getViewAngle());
-        int imageY = height() / 2.0 - width() / 2.0 * monsterRelative.angleVertical / player.getViewAngle();
-        if (monsterRelative.length < 0.0001) {
+        int imageWidthHalf = deviation / player.getViewAngle() * (width() / 2.0);
+        int imageX = (width() / 2.0) * (1 + angleHorizontal / player.getViewAngle());
+        int imageY = height() / 2.0 - width() / 2.0 * angleVertical / player.getViewAngle();
+        if (length < 0.0001) {
             continue;
         }
 
-        double length = monsterRelative.length;
-        double radius = monsterRelative.monster.getHitboxRadius();
+        double radius = monsters[i].getHitboxRadius();
         int newWidth = sqrt(length * length - radius * radius) / length * image.width();
         QImage newImage(image.width(), image.height(), QImage::Format_ARGB32);
         newImage.fill(Qt::transparent);
@@ -99,5 +100,6 @@ void View::drawMonsters(QPainter *painter) {
         painter->
                 drawImage(imageX - imageWidthHalf, imageY - imageWidthHalf,
                           finalImage.scaled(2 * imageWidthHalf, 2 * imageWidthHalf, Qt::KeepAspectRatio));
+
     }
 }

@@ -46,18 +46,27 @@ void Monster::setPosition(const QPointF& value) {
     position = value;
 }
 
+void Monster::setHeight(double newHeight) {
+    height = newHeight;
+}
+
 double Monster::getHitboxRadius() const {
     return hitboxRadius;
 }
 
 void Monster::moveToPlayer(const Player& player, double interval) {
     const QPointF& point = player.getPosition();
-    double length = sqrt((point.x() - position.x())*(point.x() - position.x())
-                         + (point.y() - position.y())*(point.y() - position.y()));
+    double dx = position.x() - point.x();
+    double dy = position.y() - point.y();
+    double dz = this->height - player.getHeight() - player.getJumpHeight();
+    double length = sqrt(dx * dx + dy * dy + dz * dz);
+
     double moveLength = speed * interval;
-    double newX = position.x() + (moveLength / length) * (point.x() - position.x());
-    double newY = position.y() + (moveLength / length) * (point.y() - position.y());
+    double newX = position.x() - (moveLength / length) * dx;
+    double newY = position.y() - (moveLength / length) * dy;
+    double newZ = this->height - (moveLength / length) * dz;
     position = QPointF(newX, newY);
+    this->height = newZ;
 }
 
 bool Monster::isDead() const {
@@ -74,6 +83,7 @@ void Monster::hit(int damage) {
     }
     QImage newImage = image;
     QPainter painter(&newImage);
-    painter.fillRect(newImage.rect(), QColor(255, 0, 0, 35));
+    double intensity = damage * 1.0 / health / 0.1;
+    painter.fillRect(newImage.rect(), QColor(255, 0, 0, 20 * intensity));
     image = newImage;
 }

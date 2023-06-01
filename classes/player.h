@@ -26,7 +26,7 @@ public:
     double getJumpHeight() const;
     void setJumpHeight(double);
 
-    const Gun& getGun() const;
+    Gun& getGun();
     void setGun(const Gun&);
 
 

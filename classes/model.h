@@ -4,11 +4,15 @@
 #include <classes/monsters.h>
 #include <classes/map.h>
 #include <classes/player.h>
+#include <QMediaPlayer>
+#include <QMediaPlayList>
+#include <QObject>
 
-class Model {
+class Model : public QObject {
+    Q_OBJECT
 public:
-    Model();
-    Model(Player, Monsters, Map, int, double);
+    Model(QObject* parent = nullptr);
+    Model(Player, Monsters, Map, int, double, QObject* parent = nullptr);
 
     Player& getPlayer();
     Monsters& getMonsters();
@@ -24,13 +28,19 @@ public:
     void jumpPlayerUpdate(double interval);
     bool isPlayerDied();
 
+    void killMonster();
+    void injureMonster();
+
 private:
     Player player;
     Monsters monsters;
     Map map;
     int score;
     double gravity;
+    QMediaPlayer* soundPlayer;
 
+    QMediaPlayer* injured;
+    QMediaPlayer* killed;
 };
 
 #endif // MODEL_H
